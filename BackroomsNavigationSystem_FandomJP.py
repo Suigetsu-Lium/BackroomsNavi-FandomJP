@@ -38,6 +38,9 @@ from modules.database import (
 # Levelブラウザー
 from modules.browser import browse_level
 
+# データベース更新モジュール (追加)
+from modules.update_database import update_database
+
 
 # =============================================================================
 # 基本設定
@@ -109,11 +112,15 @@ def show_menu():
     )
 
     print(
-        "[7] 情報データベースを更新"
+        "[7] 情報データベースを更新 (ローカルHTML抽出)"
     )
 
     print(
         "[8] ネットワークを更新"
+    )
+
+    print(
+        "[9] データベースを更新 (Master DB)"
     )
 
     print()
@@ -431,18 +438,6 @@ def database_browser():
 def html_download():
     """
     Master Database対応HTML Downloaderを起動する。
-
-    実際の処理:
-        modules/downloader.py
-
-    Downloader側で、
-
-        [1] Master DBから検索・選択
-        [2] 言語・カテゴリから選択
-        [3] URLを直接指定
-        [4] 言語版 → カテゴリ → 範囲/一覧
-
-    を行う。
     """
 
     print()
@@ -630,18 +625,10 @@ def image_download():
 def database_update():
     """
     ローカルHTMLからLevel本文・メタ情報・タグを抽出する。
-
-    抽出条件はextractor側の対話式UIで、
-        言語版 → 階層種別 → 数値範囲
-    の順に選択する。
-
-    個別TXTはextracted_fandom_levels/へ保存され、
-    extracted_fandom_levels_all.txtは同フォルダ内の全個別TXTから
-    再生成される。
     """
 
     print()
-    print("【 情報データベース更新 】")
+    print("【 情報データベース更新 (ローカルHTML抽出) 】")
     print()
 
     try:
@@ -709,6 +696,40 @@ def network_update():
         print(
             f"{type(e).__name__}: {e}"
         )
+
+
+# =============================================================================
+# マスターデータベース更新 (追加)
+# =============================================================================
+
+def master_database_update():
+    """
+    Fandomから最新のデータベース情報を取得・更新する。
+    """
+
+    print()
+    print("=" * 80)
+    print("【 マスターデータベース更新 】")
+    print("=" * 80)
+    print()
+
+    try:
+        success = update_database()
+        if success:
+            print("\nデータベースの更新が完了しました。")
+        else:
+            print("\nデータベースの更新に失敗しました。")
+
+    except KeyboardInterrupt:
+        print("\nデータベース更新をキャンセルしました。")
+
+    except Exception as e:
+        print()
+        print("=" * 80)
+        print("データベース更新中にエラーが発生しました。")
+        print("=" * 80)
+        print()
+        print(f"{type(e).__name__}: {e}")
 
 
 # =============================================================================
@@ -827,6 +848,16 @@ def main():
             pause()
 
         # ---------------------------------------------------------------------
+        # 9. Master DB更新 (追加)
+        # ---------------------------------------------------------------------
+
+        elif choice == "9":
+
+            master_database_update()
+
+            pause()
+
+        # ---------------------------------------------------------------------
         # 0. 終了
         # ---------------------------------------------------------------------
 
@@ -853,7 +884,7 @@ def main():
             )
 
             print(
-                "1～8または0を入力してください。"
+                "1～9または0を入力してください。"
             )
 
             pause()
