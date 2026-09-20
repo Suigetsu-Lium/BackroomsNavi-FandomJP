@@ -1,5 +1,9 @@
 # Backrooms Navigation System - Fandom JP
 
+[![GitHub release](https://shields.io)](https://github.com)
+[![Language](https://shields.io)](https://github.com)
+[![License](https://shields.io)](https://github.com)
+
 Backrooms Fandom JP のデータをローカルに構築し、Level検索・接続ネットワークのルート解析・テキストや画像のオフライン閲覧を行うナビゲーションシステムです。
 
 ## 📥 ダウンロードと起動方法
