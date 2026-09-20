@@ -38,7 +38,7 @@ Fandom JP の一覧HTMLから、データベース・検索用Level Listまで�
 [0] 終了
 
 実行:
-    python update_database.py
+    python modules/update_database.py
 """
 
 import os
@@ -48,11 +48,13 @@ import traceback
 
 
 # =============================================================================
-# 基本パス
+# 基本パス (modules/ の親ディレクトリ = プロジェクトルートを取得)
 # =============================================================================
 
 BASE_DIR = os.path.dirname(
-    os.path.abspath(__file__)
+    os.path.dirname(
+        os.path.abspath(__file__)
+    )
 )
 
 MODULES_DIR = os.path.join(
@@ -123,7 +125,7 @@ except Exception as e:
     print()
     traceback.print_exc()
 
-    sys.exit(1)
+    raise e
 
 
 # =============================================================================
@@ -208,7 +210,7 @@ def check_index_html():
     print()
 
     print(
-        f"確認対象フォルダ:"
+        "確認対象フォルダ:"
     )
 
     print(
@@ -835,7 +837,7 @@ def main():
             "終了します。"
         )
 
-        return
+        return True
 
     show_selected_mode(
         mode
@@ -845,9 +847,11 @@ def main():
         mode
     )
 
-    if not success:
+    return success
 
-        sys.exit(1)
+
+# エイリアス（親プログラムからの分かりやすい呼び出し用）
+update_database = main
 
 
 # =============================================================================
@@ -858,7 +862,9 @@ if __name__ == "__main__":
 
     try:
 
-        main()
+        success = main()
+        if not success:
+            sys.exit(1)
 
     except KeyboardInterrupt:
 
