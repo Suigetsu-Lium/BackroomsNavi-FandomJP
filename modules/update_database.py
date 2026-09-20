@@ -48,14 +48,22 @@ import traceback
 
 
 # =============================================================================
-# 基本パス (modules/ の親ディレクトリ = プロジェクトルートを取得)
+# 基本パス設定
+#   - exe実行時: .../BackroomsNavigationSystem_FandomJP/_internal
+#   - 通常実行時: プロジェクトルート (modules/ の親ディレクトリ)
 # =============================================================================
 
-BASE_DIR = os.path.dirname(
-    os.path.dirname(
-        os.path.abspath(__file__)
+if getattr(sys, "frozen", False):
+    # PyInstaller で exe 化されている場合
+    EXE_DIR = os.path.dirname(sys.executable)
+    BASE_DIR = os.path.join(EXE_DIR, "_internal")
+else:
+    # 通常の Python スクリプト実行時
+    BASE_DIR = os.path.dirname(
+        os.path.dirname(
+            os.path.abspath(__file__)
+        )
     )
-)
 
 MODULES_DIR = os.path.join(
     BASE_DIR,
@@ -210,7 +218,7 @@ def check_index_html():
     print()
 
     print(
-        "確認対象フォルダ:"
+        f"確認対象フォルダ:"
     )
 
     print(
@@ -758,35 +766,35 @@ def execute_update(mode):
     if mode == "1":
 
         print(
-            "  index_html/"
+            f"  {INDEX_HTML_DIR}"
         )
 
     print(
-        "  parsed_index/all_links.csv"
+        f"  {os.path.join(PARSED_INDEX_DIR, 'all_links.csv')}"
     )
 
     print(
-        "  parsed_index/pages_database.csv"
+        f"  {os.path.join(PARSED_INDEX_DIR, 'pages_database.csv')}"
     )
 
     print(
-        "  parsed_index/pages_database_classified.csv"
+        f"  {os.path.join(PARSED_INDEX_DIR, 'pages_database_classified.csv')}"
     )
 
     print(
-        "  parsed_index/translation_database.csv"
+        f"  {os.path.join(PARSED_INDEX_DIR, 'translation_database.csv')}"
     )
 
     print(
-        "  parsed_index/translation_database_classified.csv"
+        f"  {os.path.join(PARSED_INDEX_DIR, 'translation_database_classified.csv')}"
     )
 
     print(
-        "  parsed_index/pages_master.csv"
+        f"  {os.path.join(PARSED_INDEX_DIR, 'pages_master.csv')}"
     )
 
     print(
-        "  level_lists/"
+        f"  {LEVEL_LIST_DIR}"
     )
 
     print()
