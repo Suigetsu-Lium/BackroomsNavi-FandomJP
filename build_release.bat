@@ -10,6 +10,7 @@ echo ================================================
 echo.
 
 set DIST_DIR=dist\BackroomsNavigationSystem_FandomJP
+set INTERNAL_DIR=%DIST_DIR%\_internal
 
 echo [1/3] PyInstallerでビルドしています...
 pyinstaller --clean --noconfirm --onedir --console ^
@@ -26,33 +27,33 @@ if errorlevel 1 (
 )
 
 echo.
-echo [2/3] 必要なデータフォルダを配置しています...
+echo [2/3] _internal 内に必要なデータフォルダを配置しています...
 
-:: 実行時に必要なフォルダを作成・既存データをコピー
+:: すべて _internal の中にコピー・作成する
 if exist "parsed_index" (
-    echo   - parsed_index をコピー中...
-    xcopy /E /I /Y "parsed_index" "%DIST_DIR%\parsed_index" > nul
+    echo   - parsed_index を _internal にコピー中...
+    xcopy /E /I /Y "parsed_index" "%INTERNAL_DIR%\parsed_index\" > nul
 ) else (
-    mkdir "%DIST_DIR%\parsed_index" 2>nul
+    mkdir "%INTERNAL_DIR%\parsed_index" 2>nul
 )
 
 if exist "level_lists" (
-    echo   - level_lists をコピー中...
-    xcopy /E /I /Y "level_lists" "%DIST_DIR%\level_lists" > nul
+    echo   - level_lists を _internal にコピー中...
+    xcopy /E /I /Y "level_lists" "%INTERNAL_DIR%\level_lists\" > nul
 ) else (
-    mkdir "%DIST_DIR%\level_lists" 2>nul
+    mkdir "%INTERNAL_DIR%\level_lists" 2>nul
 )
 
 if exist "index_html" (
-    echo   - index_html をコピー中...
-    xcopy /E /I /Y "index_html" "%DIST_DIR%\index_html" > nul
+    echo   - index_html を _internal にコピー中...
+    xcopy /E /I /Y "index_html" "%INTERNAL_DIR%\index_html\" > nul
 ) else (
-    mkdir "%DIST_DIR%\index_html" 2>nul
+    mkdir "%INTERNAL_DIR%\index_html" 2>nul
 )
 
-:: その他空フォルダの生成（必要に応じて）
-if not exist "%DIST_DIR%\data" mkdir "%DIST_DIR%\data" 2>nul
-if not exist "%DIST_DIR%\extracted_fandom_levels" mkdir "%DIST_DIR%\extracted_fandom_levels" 2>nul
+:: その他モジュールが使用する空フォルダを _internal 内に準備
+if not exist "%INTERNAL_DIR%\data" mkdir "%INTERNAL_DIR%\data" 2>nul
+if not exist "%INTERNAL_DIR%\extracted_fandom_levels" mkdir "%INTERNAL_DIR%\extracted_fandom_levels" 2>nul
 
 echo.
 echo [3/3] ビルドが正常に完了しました！
